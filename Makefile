@@ -1,4 +1,4 @@
-GOPROXY=goproxy.cn,direct
+export GOPROXY=goproxy.cn,direct
 
 OBJ=kafka-consumer
 all: $(OBJ)
