@@ -39,6 +39,8 @@ func (c *ConsumerNew) Run() error {
 		return err
 	}
 
+	defer func() { _ = client.Close() }()
+
 	for {
 		if err := client.Consume(context.Background(), c.opt.Topics, c); err != nil {
 			fmt.Printf("consume failed: %v, sleep 5 seconds", err)

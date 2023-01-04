@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"log"
 	"time"
 
 	"github.com/Shopify/sarama"
@@ -20,6 +22,21 @@ func (c *ConsumerOld) Run() error {
 	if err != nil {
 		return err
 	}
+
+	defer func() { _ = consumer.Close() }()
+
+	go func() {
+		for err := range consumer.Errors() {
+			fmt.Printf("[GOROUTINE] Error: %s\n", err.Error())
+		}
+	}()
+
+	// consume notifications
+	go func() {
+		for ntf := range consumer.Notifications() {
+			log.Printf("[GOROUTINE] Rebalanced: %+v\n", ntf)
+		}
+	}()
 
 	for msg := range consumer.Messages() {
 		c.cb(msg)
