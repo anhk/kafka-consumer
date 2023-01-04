@@ -49,6 +49,7 @@ func (c *ConsumerOld) Run() error {
 func (c *ConsumerOld) Init(opt *ConsumerOption) {
 	c.opt = opt
 	config := cluster.NewConfig()
+	config.Consumer.Offsets.CommitInterval = time.Second
 	config.Consumer.Offsets.AutoCommit.Interval = time.Second
 	config.Consumer.Offsets.AutoCommit.Enable = true
 	config.Group.Return.Notifications = true
